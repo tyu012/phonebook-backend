@@ -1,7 +1,14 @@
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
 
 app.use(express.json())
+
+morgan.token('data', (req, res) => {
+	return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 // Initial data
 
@@ -40,7 +47,7 @@ const generateID = max => {
 	return newID
 }
 
-// Requests
+// Routes
 
 app.get('/info', (req, res) => {
 	const info = `Phonebook has info for ${persons.length} ${persons.length === 1 ? 'person' : 'people'}`
@@ -49,7 +56,6 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-	console.log('GET', persons)
 	res.json(persons)
 })
 
@@ -57,10 +63,8 @@ app.get('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	const person = persons.find(p => p.id === id)
 	if (person) {
-		console.log('GET', person)
 		res.json(person)
 	} else {
-		console.log('GET', 'id', id, 'not found')
 		res.status(404).end()
 	}
 })
@@ -69,7 +73,6 @@ app.delete('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	persons = persons.filter(p => p.id !== id)
 
-	console.log('DELETE', 'id', id)
 	res.status(204).end()
 })
 
@@ -78,15 +81,12 @@ app.post('/api/persons', (req, res) => {
 
 	// handle errors
 	if (!body.name) {
-		console.log('name missing')
 		return res.status(400).json({ error: 'name missing' })
 	}
 	if (!body.number) {
-		console.log('number missing')
 		return res.status(400).json({ error: 'number missing' })
 	}
 	if (persons.find(p => p.name === body.name)) {
-		console.log('name must be unique')
 		return res.status(400).json({ error: 'name must be unique' })
 	}
 
@@ -99,7 +99,6 @@ app.post('/api/persons', (req, res) => {
 
 	persons = persons.concat(person)
 
-	console.log('POST', person)
 	res.json(person)
 })
 
