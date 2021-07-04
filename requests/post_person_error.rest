@@ -32,3 +32,40 @@ Content-Type: application/json
 {
 	"somethingElse": "foo bar"
 }
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"name": "Mary Poppendieck",
+	"number": "39-23-6423100"
+}
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"number": "123-456-7890"
+}
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"name": "Foo Bars"
+}
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"somethingElse": "foo bar"
+}

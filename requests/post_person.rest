@@ -26,3 +26,34 @@ Content-Type: application/json
 	"number": "22-345-67",
 	"somethingElse": "Hello world!"
 }
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"name": "John Doe",
+	"number": "(123) 456-7890"
+}
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"name": "Test Subject",
+	"number": "98-765-43210"
+}
+
+###
+
+POST https://fso-phonebook-t.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+	"name": "Foo Bar",
+	"number": "22-345-67",
+	"somethingElse": "Hello world!"
+}
