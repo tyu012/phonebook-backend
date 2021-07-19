@@ -8,6 +8,8 @@ app.use(cors())
 
 app.use(express.json())
 
+app.use(express.static('build'))
+
 morgan.token('data', (req, res) => {
 	return JSON.stringify(req.body)
 })
@@ -104,6 +106,8 @@ app.post('/api/persons', (req, res) => {
 
 	res.json(person)
 })
+
+// WIP: Overwriting existing entry
 
 // Listen to HTTP requests
 
