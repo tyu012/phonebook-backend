@@ -31,3 +31,5 @@ Full Stack Open
 ## Try it out
 
 https://fso-phonebook-t.herokuapp.com/
+
+A frontend that works with the backend is also included.
