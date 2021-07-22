@@ -22,7 +22,7 @@ Full Stack Open
 
 ```json
 {
-	"id": 123456,
+	"id": "...",
 	"name": "Foo Bar",
 	"number": "123-456-7890"
 }
