@@ -4,6 +4,8 @@ Full Stack Open
 
 ## Usage
 
+**Data is now stored and retrieved using MongoDB**
+
 **GET /info** Displays the number of entries in the phonebook and the current date.
 
 **GET /api/persons** Displays all entries in the phonebook in the JSON format.
