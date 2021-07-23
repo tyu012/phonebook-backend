@@ -7,11 +7,8 @@ const Person = require('./models/person')
 const app = express()
 
 app.use(cors())
-
-app.use(express.json())
-
 app.use(express.static('build'))
-
+app.use(express.json())
 morgan.token('data', (req, res) => {
 	return JSON.stringify(req.body)
 })
@@ -70,6 +67,7 @@ app.get('/api/persons', (req, res) => {
 		.then(persons => { res.json(persons) })
 })
 
+// Not using MongoDB yet
 app.get('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	const person = persons.find(p => p.id === id)
@@ -109,11 +107,24 @@ app.post('/api/persons', (req, res) => {
 		.save()
 		.then(savedPerson => {
 			console.log(`${savedPerson.name} saved`)
-			response.json(savedPerson)
+			res.json(savedPerson)
 		})
 })
 
-// WIP: Overwriting existing entry
+app.put('/api/persons/:id', (req, res, next) => {
+	const body = req.body
+
+	const person = {
+		name: body.name,
+		number: body.number,
+	}
+
+	Person.findByIdAndUpdate(req.params.id, person, { new: true })
+		.then(updatedPerson => {
+			res.json(updatedPerson)
+		})
+		.catch(err => next(err))
+})
 
 // Listen to HTTP requests
 
@@ -130,5 +141,7 @@ const errorHandler = (err, req, res, next) => {
 	if (err.name === 'CastError') {
 		return res.status(400).send({ error: 'malformatted id' })
 	}
+
+	next(error)
 }
 app.use(errorHandler)
