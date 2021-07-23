@@ -3,6 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
+const { response } = require('express')
 
 const app = express()
 
@@ -14,81 +15,52 @@ morgan.token('data', (req, res) => {
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
-// Initial data
-
-// To be removed
-let persons = [
-	{
-		"id": 1,
-		"name": "Arto Hellas",
-		"number": "040-123456"
-	},
-	{
-		"id": 2,
-		"name": "Ada Lovelace",
-		"number": "39-44-5323523"
-	},
-	{
-		"id": 3,
-		"name": "Dan Abramov",
-		"number": "12-43-234345"
-	},
-	{
-		"id": 4,
-		"name": "Mary Poppendieck",
-		"number": "39-23-6423122"
-	}
-]
-
-const MAX_ID = 1000000
-
-// Functions
-
-// To be removed
-const generateID = max => {
-	let newID
-	do {
-		newID = Math.floor(Math.random() * max)
-	} while (persons.find(p => p.id === newID))
-	return newID
-}
-
 // Routes
 
-app.get('/info', (req, res) => {
-	const info = `Phonebook has info for ${persons.length} ${persons.length === 1 ? 'person' : 'people'}`
-	const date = new Date().toString()
-	res.send(`<p>${info}</p><p>${date}</p>`)
+app.get('/info', (req, res, next) => {
+	Person
+		.find({})
+		.then(persons => {
+			const info = `Phonebook has info for ${persons.length} ${persons.length === 1 ? 'person' : 'people'}`
+			const date = new Date().toString()
+			res.send(`<p>${info}</p><p>${date}</p>`)
+		})
+		.catch(err => next(err))
 })
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
 	Person
 		.find({})
 		.then(persons => { res.json(persons) })
+		.catch(err => next(err))
 })
 
-// Not using MongoDB yet
-app.get('/api/persons/:id', (req, res) => {
-	const id = Number(req.params.id)
-	const person = persons.find(p => p.id === id)
-	if (person) {
-		res.json(person)
-	} else {
-		res.status(404).end()
-	}
+app.get('/api/persons/:id', (req, res, next) => {
+	Person
+		.findById(req.params.id)
+		.then(person => {
+			if (person) {
+				res.json(person)
+			} else {
+				res.status(404).end()
+			}
+		})
+		.catch(err => next(err))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-	Person.findByIdAndRemove(req.params.id)
+app.delete('/api/persons/:id', (req, res, next) => {
+	Person
+		.findByIdAndRemove(req.params.id)
 		.then(result => {
 			res.status(204).end()
 		})
+		.catch(err => next(err))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 	const body = req.body
 
-	// handle errors
+	// handle bad requests
 	if (!body.name) {
 		return res.status(400).json({ error: 'name missing' })
 	}
@@ -109,6 +81,7 @@ app.post('/api/persons', (req, res) => {
 			console.log(`${savedPerson.name} saved`)
 			res.json(savedPerson)
 		})
+		.catch(err => next(err))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -142,6 +115,6 @@ const errorHandler = (err, req, res, next) => {
 		return res.status(400).send({ error: 'malformatted id' })
 	}
 
-	next(error)
+	next(err)
 }
 app.use(errorHandler)
