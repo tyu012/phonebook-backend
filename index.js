@@ -121,3 +121,14 @@ const PORT = process.env.PORT
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
 })
+
+// Error handling middleware
+
+const errorHandler = (err, req, res, next) => {
+	console.error(err.message)
+
+	if (err.name === 'CastError') {
+		return res.status(400).send({ error: 'malformatted id' })
+	}
+}
+app.use(errorHandler)
