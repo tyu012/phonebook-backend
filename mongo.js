@@ -41,6 +41,7 @@ if (process.argv.length === 3) {
 
 	newPerson
 		.save()
+		// eslint-disable-next-line no-unused-vars
 		.then(result => {
 			console.log(`${newPerson.name} saved`)
 			mongoose.connection.close()

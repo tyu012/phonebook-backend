@@ -3,13 +3,13 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
-const { response } = require('express')
 
 const app = express()
 
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
+// eslint-disable-next-line no-unused-vars
 morgan.token('data', (req, res) => {
 	return JSON.stringify(req.body)
 })
@@ -51,6 +51,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 app.delete('/api/persons/:id', (req, res, next) => {
 	Person
 		.findByIdAndRemove(req.params.id)
+		// eslint-disable-next-line no-unused-vars
 		.then(result => {
 			res.status(204).end()
 		})
