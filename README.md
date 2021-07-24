@@ -14,7 +14,7 @@ Full Stack Open
 
 **DELETE /api/persons/:id** Deletes the entry in the phonebook corresponding to `id` if it can be found.
 
-**POST /api/persons** Adds an entry to the phonebook in the JSON format with a randomized unique `id` property. For the backend to accept an entry, the entry must have at least the `name` and `number` properties, or a 400 status code will be sent. Extraneous properties will be removed by the backend before the entry is added to the phonebook.
+**POST /api/persons** Adds an entry to the phonebook in the JSON format with a randomized unique `id` property. For the backend to accept an entry, the entry must have at least the `name` and `number` properties, or a 400 status code will be sent. The `name` must be unique and the `number` must be greater than 8 characters in length. Extraneous properties will be removed by the backend before the entry is added to the phonebook.
 
 ## Environment variables
 
